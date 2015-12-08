@@ -1,5 +1,6 @@
 package com.example.shanuka.salesforce_android_api;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -27,6 +28,7 @@ import roboguice.util.Ln;
 @ContentView(R.layout.activity_main)
 public class MainActivity extends BaseActivity {
 
+    public static final String EXTRA_AUTHNTICATION = "authntication";
     @InjectView(R.id.editTextUserName)
     private EditText editTextUserName;
 
@@ -113,9 +115,11 @@ public class MainActivity extends BaseActivity {
             //removeProgressFragment();
             Ln.d("access_token", "access_token "+mAuthentication.getAccessToken());
 
-            Toast.makeText(MainActivity.this, mAuthentication.getAuthentication(), Toast.LENGTH_SHORT)
-                    .show();
+//            Toast.makeText(MainActivity.this, mAuthentication.getAuthentication(), Toast.LENGTH_SHORT)
+//                    .show();
 
+
+            startMainActivity(mAuthentication);
 
 //            mIAppreference.putToken(mAuthentication.getAccessToken());
 //
@@ -127,5 +131,13 @@ public class MainActivity extends BaseActivity {
 //            }
 
         }
+    }
+
+    private void startMainActivity(Authentication mAuthentication) {
+        Intent intent = new Intent(MainActivity.this, DocumentUploadActivity.class);
+        intent.putExtra(EXTRA_AUTHNTICATION,mAuthentication);
+        startActivity(intent);
+
+
     }
 }

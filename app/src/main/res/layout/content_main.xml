@@ -14,31 +14,41 @@
 
 
     <LinearLayout
-        android:orientation="vertical"
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="120dp"
-        android:id="@+id/linearLayout">
+        android:orientation="vertical">
 
         <EditText
+            android:id="@+id/editTextUserName"
             android:layout_width="match_parent"
             android:layout_height="44dp"
-            android:id="@+id/editTextUserName" android:hint="@string/user_name" android:longClickable="false" android:textIsSelectable="false" android:inputType="textNoSuggestions"/>
+            android:hint="@string/user_name"
+            android:inputType="textNoSuggestions"
+            android:longClickable="false"
+            android:textIsSelectable="false" android:text="shanukagayashan@gmail.com"/>
 
         <EditText
+            android:id="@+id/editTextPassword"
             android:layout_width="match_parent"
             android:layout_height="44dp"
-            android:inputType="textPassword"
+            android:layout_marginTop="15dp"
             android:ems="10"
-            android:id="@+id/editTextPassword" android:layout_marginTop="15dp" android:hint="@string/password" android:longClickable="false" android:textIsSelectable="false" />
+            android:hint="@string/password"
+            android:inputType="textPassword"
+            android:longClickable="false"
+            android:textIsSelectable="false" android:text="Shenali123s" />
 
         <Button
+            android:id="@+id/buttonLogin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Login"
-            android:id="@+id/buttonLogin" android:layout_gravity="center" android:layout_marginTop="15dp" />
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:text="Login" />
 
     </LinearLayout>
 
