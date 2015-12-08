@@ -12,8 +12,34 @@
     tools:context="com.example.shanuka.salesforce_android_api.MainActivity"
     tools:showIn="@layout/activity_main">
 
-    <TextView
-        android:layout_width="wrap_content"
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Hello World!" />
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="120dp"
+        android:id="@+id/linearLayout">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:id="@+id/editTextUserName" android:hint="@string/user_name" android:longClickable="false" android:textIsSelectable="false" android:inputType="textNoSuggestions"/>
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:inputType="textPassword"
+            android:ems="10"
+            android:id="@+id/editTextPassword" android:layout_marginTop="15dp" android:hint="@string/password" android:longClickable="false" android:textIsSelectable="false" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Login"
+            android:id="@+id/buttonLogin" android:layout_gravity="center" android:layout_marginTop="15dp" />
+
+    </LinearLayout>
+
 </RelativeLayout>
