@@ -11,6 +11,7 @@ import android.widget.ImageView;
 
 import com.example.shanuka.salesforce_android_api.clients.AuthenticationRequest;
 import com.example.shanuka.salesforce_android_api.clients.UploadFileDocument;
+import com.example.shanuka.salesforce_android_api.clients.UploadProfileDocument;
 import com.example.shanuka.salesforce_android_api.dto.AuthenticationDto;
 import com.example.shanuka.salesforce_android_api.dto.DocumentDto;
 import com.example.shanuka.salesforce_android_api.model.Authentication;
@@ -51,12 +52,14 @@ public class DocumentUploadActivity extends BaseActivity {
 
         imageView.setImageBitmap(getBitmapFromAssets("image/test.png"));
 
-        mDocumentDto.setDescription("Marketing brochure for Q1 2011");
-        mDocumentDto.setName("Marketing Brochure Q1");
-        mDocumentDto.setKeywords("marketing,sales,update");
-
-        mDocumentDto.setFolderId("005D0000001GiU7");
-        mDocumentDto.setType("pdf");
+        mDocumentDto.setCropX("0");
+        mDocumentDto.setCropY("0");
+        mDocumentDto.setCropSize("200");
+//        mDocumentDto.setName("Marketing Brochure Q1");
+//        mDocumentDto.setKeywords("marketing,sales,update");
+//
+//        mDocumentDto.setFolderId("005D0000001GiU7");
+//        mDocumentDto.setType("pdf");
 
         buttonUpload.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -82,7 +85,7 @@ public class DocumentUploadActivity extends BaseActivity {
 
     public void performRequest() {
         // showProgressFragment(R.id.progress);
-        UploadFileDocument request = new UploadFileDocument(DocumentUploadActivity.this,mDocumentDto, "/storage/emulated/0/Download/api_rest.pdf",mAuthentication);
+        UploadProfileDocument request = new UploadProfileDocument(DocumentUploadActivity.this,mDocumentDto, "/storage/emulated/0/Download/index.jpg",mAuthentication);
         request.setRetryPolicy(new RetryPolicy() {
 
             @Override

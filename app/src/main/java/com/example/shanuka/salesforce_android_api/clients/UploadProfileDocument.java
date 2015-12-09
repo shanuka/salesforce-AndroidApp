@@ -1,6 +1,5 @@
 package com.example.shanuka.salesforce_android_api.clients;
 
-import android.content.Context;
 import android.os.Build;
 import android.util.Log;
 import android.widget.Toast;
@@ -27,16 +26,18 @@ import org.springframework.web.client.HttpClientErrorException;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 
 
-public class UploadFileDocument extends SpringAndroidSpiceRequest<String> {
+public class UploadProfileDocument extends SpringAndroidSpiceRequest<String> {
 
     public final DocumentUploadActivity ctx;
     private final Authentication muthentication;
     public String fileUrl;
     DocumentDto mDocumentDto;
 
-    public UploadFileDocument(DocumentUploadActivity fragmentActivity, DocumentDto mDocumentDto, String fileurl, Authentication muthentication ) {
+    public UploadProfileDocument(DocumentUploadActivity fragmentActivity, DocumentDto mDocumentDto, String fileurl, Authentication muthentication ) {
         super(String.class);
         this.mDocumentDto = mDocumentDto;
         this.fileUrl = fileurl;
@@ -50,7 +51,7 @@ public class UploadFileDocument extends SpringAndroidSpiceRequest<String> {
         String pathTemplate;
 
         pathTemplate = url
-                + "services/data/v35.0/chatter/users/me/files";
+                + "services/data/v35.0/connect/user-profiles/00528000000iGwtAAE/photo";
         ObjectMapper mapper = new ObjectMapper();
         MultiValueMap<String, Object> parts = new LinkedMultiValueMap<String, Object>();
 
@@ -59,41 +60,52 @@ public class UploadFileDocument extends SpringAndroidSpiceRequest<String> {
 
        // Log.e("mDocumentDto", "getFolderId " + this.mDocumentDto.getFolderId());
         HttpHeaders xHeader = new HttpHeaders();
-        xHeader.add("Content-Disposition", "form-data; name=json");
-        xHeader.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> xPart = new HttpEntity<>("{\"title\":\"Shanuka Gayashan\"}", xHeader);
+        xHeader.add("Content-Disposition", "form-data; name=\"json\"");
+        final Map<String, String> parameterMap = new HashMap<String, String>(4);
+        parameterMap.put("charset", "UTF-8");
+        xHeader.setContentType(
+                new MediaType("application","json", parameterMap));
+        HttpEntity<String> xPart = new HttpEntity<>("{\"cropX\" : 0,\"cropY\" : 0,\"cropSize\" : 150 }", xHeader);
         parts.add("json", xPart);
 
-        System.out.println("edit cpd data " + mapper.writeValueAsString(this.mDocumentDto));
+        //System.out.println("edit cpd data " + mapper.writeValueAsString(this.mDocumentDto));
 
 
-        FileSystemResource fileSystemResource = new FileSystemResource(fileUrl) {
+//        FileSystemResource fileSystemResource = new FileSystemResource(fileUrl) {
+//
+//            @Override
+//            public String getFilename() {
+//                //String filename = fFilename;
+//
+////                        if (fContentType.toLowerCase().equals("image/jpeg")) {
+////                            if (!filename.toLowerCase().endsWith(".jpeg")) {
+////                                filename += ".jpeg";
+////                            }
+////                        }
+//
+//                return "index.jpg";
+//            }
+//        };
 
-            @Override
-            public String getFilename() {
-                //String filename = fFilename;
-
-//                        if (fContentType.toLowerCase().equals("image/jpeg")) {
-//                            if (!filename.toLowerCase().endsWith(".jpeg")) {
-//                                filename += ".jpeg";
-//                            }
-//                        }
-
-                return "index.jpg";
-            }
-        };
-
-
+        FileSystemResource mFileSystemResource =  new FileSystemResource(fileUrl);
+//
+//
 //        HttpHeaders headers = new HttpHeaders();
-//        headers.add("Content-Disposition", "form-data; name=\"Body\"; filename=\"2011Q1MktgBrochure.pdf\"");
-//        headers.setContentType(new MediaType("application","pdf"));
-        HttpEntity httpEntity = new HttpEntity(fileSystemResource);
-        parts.add("fileData", httpEntity);
+//        //headers.add("Content-Disposition", "form-data; name=\"fileUpload\"; filename=\"index.jpg\"");
+//       // headers.setContentType(new MediaType("application","pdf"));
+//        final Map<String, String> parameterMapf = new HashMap<String, String>(4);
+//        parameterMapf.put("charset", "ISO-8859-1");
+//        headers.setContentType(
+//                new MediaType("application","octet-stream", parameterMapf));
+//        headers.setContentDispositionFormData("fileUpload","index.jpg");
+
+        HttpEntity httpEntity = new HttpEntity(mFileSystemResource);
+        parts.add("fileUpload", httpEntity);
 
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
-            System.setProperty("http.keepAlive", "false");
-        }
+//        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
+//            System.setProperty("http.keepAlive", "false");
+//        }
 
 
         FormHttpMessageConverter formHttpMessageConverter = new FormHttpMessageConverter();
@@ -125,37 +137,10 @@ public class UploadFileDocument extends SpringAndroidSpiceRequest<String> {
         } catch (HttpClientErrorException e2) {
 
 
-            //
-            try {
-
-                final String mLoginError = mapper.readValue(
-                        e2.getResponseBodyAsString(), String.class);
-                ctx.runOnUiThread(new Runnable() {
-
-                    @Override
-                    public void run() {
-                        // TODO Auto-generated method stub
-                        Toast.makeText(ctx.getApplicationContext(),
-                                ""+ mLoginError, Toast.LENGTH_SHORT)
-                                .show();
-                    }
-                });
-
+                Log.d("ee",e2.getResponseBodyAsString());
                 // throw new SpiceException(mLoginError.getErrorDescription());
 
-            } catch (JsonGenerationException e) {
 
-                e.printStackTrace();
-
-            } catch (JsonMappingException e) {
-
-                e.printStackTrace();
-
-            } catch (IOException e) {
-
-                e.printStackTrace();
-
-            }
             throw e2;
         }
 

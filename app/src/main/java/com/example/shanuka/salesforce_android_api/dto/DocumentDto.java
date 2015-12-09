@@ -12,53 +12,98 @@ import roboguice.inject.ContextSingleton;
 @ContextSingleton
 public class DocumentDto {
 
-    private String Name;
+    //private String title;
 
-    private String Description;
+    private String cropX;
+    private String cropY;
+    private String cropSize;
 
-    private String Type;
+//    public String getTitle() {
+//        return title;
+//    }
+//
+//    public void setTitle(String title) {
+//        this.title = title;
+//    }
+//
+//    public String getCropX() {
+//        return cropX;
+//    }
+//
+//    public void setCropX(String cropX) {
+//        this.cropX = cropX;
+//    }
 
-    private String FolderId;
-
-    private String Keywords;
-
-    public String getName() {
-        return Name;
+    public String getCropX() {
+        return cropX;
     }
 
-    public void setName(String name) {
-        Name = name;
+    public void setCropX(String cropX) {
+        this.cropX = cropX;
     }
 
-    public String getDescription() {
-        return Description;
+    public String getCropY() {
+        return cropY;
     }
 
-    public void setDescription(String description) {
-        Description = description;
+    public void setCropY(String cropY) {
+        this.cropY = cropY;
     }
 
-    public String getType() {
-        return Type;
+    public String getCropSize() {
+        return cropSize;
     }
 
-    public void setType(String type) {
-        Type = type;
+    public void setCropSize(String cropSize) {
+        this.cropSize = cropSize;
     }
 
-    public String getFolderId() {
-        return FolderId;
-    }
 
-    public void setFolderId(String folderId) {
-        FolderId = folderId;
-    }
-
-    public String getKeywords() {
-        return Keywords;
-    }
-
-    public void setKeywords(String keywords) {
-        Keywords = keywords;
-    }
+    //    private String Description;
+//
+//    private String Type;
+//
+//    private String FolderId;
+//
+//    private String Keywords;
+//
+//    public String getName() {
+//        return Name;
+//    }
+//
+//    public void setName(String name) {
+//        Name = name;
+//    }
+//
+//    public String getDescription() {
+//        return Description;
+//    }
+//
+//    public void setDescription(String description) {
+//        Description = description;
+//    }
+//
+//    public String getType() {
+//        return Type;
+//    }
+//
+//    public void setType(String type) {
+//        Type = type;
+//    }
+//
+//    public String getFolderId() {
+//        return FolderId;
+//    }
+//
+//    public void setFolderId(String folderId) {
+//        FolderId = folderId;
+//    }
+//
+//    public String getKeywords() {
+//        return Keywords;
+//    }
+//
+//    public void setKeywords(String keywords) {
+//        Keywords = keywords;
+//    }
 }
