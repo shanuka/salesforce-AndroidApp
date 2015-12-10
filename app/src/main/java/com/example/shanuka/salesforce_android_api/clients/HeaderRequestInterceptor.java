@@ -11,7 +11,6 @@ import java.io.IOException;
 public class HeaderRequestInterceptor implements ClientHttpRequestInterceptor {
 
 
-
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body,
                                         ClientHttpRequestExecution execution) throws IOException {
@@ -22,7 +21,7 @@ public class HeaderRequestInterceptor implements ClientHttpRequestInterceptor {
 
         //request.getHeaders().add("Authorization", mIAppreference.getToken());
 
-       // HttpHeaders httpHeaders = DigitalisApi.getHttpAuthorizationHeader();
+        // HttpHeaders httpHeaders = DigitalisApi.getHttpAuthorizationHeader();
 
 //        String authuraisation = DigitalisApi.getAuthuraisation();
 //        request.getHeaders().add("Authorization", authuraisation);

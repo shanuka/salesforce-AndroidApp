@@ -25,29 +25,28 @@ import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class MyApplication extends MultiDexApplication {
 
-	public MyApplication() {
-		super();
-	}
+    public MyApplication() {
+        super();
+    }
 
-	@Override
-	public void onCreate() {
+    @Override
+    public void onCreate() {
 
-		super.onCreate();
-		//MultiDex.install(this);
+        super.onCreate();
+        //MultiDex.install(this);
 
-	}
+    }
 
-	@Override
-	protected void attachBaseContext(Context base) {
-		super.attachBaseContext(base);
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
 
-		CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
-				.setDefaultFontPath("fonts/RobotoCondensed-Regular.ttf")
-				.setFontAttrId(R.attr.fontPath).build());
+        CalligraphyConfig.initDefault(new CalligraphyConfig.Builder()
+                .setDefaultFontPath("fonts/RobotoCondensed-Regular.ttf")
+                .setFontAttrId(R.attr.fontPath).build());
 
-		MultiDex.install(this);
-	}
-
+        MultiDex.install(this);
+    }
 
 
 //	public void initLocation(final Context context) {

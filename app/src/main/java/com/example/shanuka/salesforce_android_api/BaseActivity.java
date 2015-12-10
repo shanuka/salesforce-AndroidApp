@@ -10,35 +10,35 @@ import uk.co.chrisjenx.calligraphy.CalligraphyContextWrapper;
 
 public class BaseActivity extends RoboAppCompatActivity {
 
-	protected SpiceManager spiceManager = new SpiceManager(
-			Jackson2SpringAndroidSpiceService.class);
+    protected SpiceManager spiceManager = new SpiceManager(
+            Jackson2SpringAndroidSpiceService.class);
 
-	public BaseActivity() {
-		super();
-	}
+    public BaseActivity() {
+        super();
+    }
 
-	@Override
-	protected void attachBaseContext(Context newBase) {
-		super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
-	}
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(CalligraphyContextWrapper.wrap(newBase));
+    }
 
-	@Override
-	public void onStart() {
-		super.onStart();
-		if (!spiceManager.isStarted()) {
-			spiceManager.start(this);
-		}
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (!spiceManager.isStarted()) {
+            spiceManager.start(this);
+        }
 
-	}
+    }
 
-	@Override
-	public void onStop() {
+    @Override
+    public void onStop() {
 
-		if (spiceManager.isStarted()) {
-			spiceManager.shouldStop();
-		}
-		super.onStop();
+        if (spiceManager.isStarted()) {
+            spiceManager.shouldStop();
+        }
+        super.onStop();
 
-	}
+    }
 
 }

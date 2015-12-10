@@ -16,7 +16,9 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
-import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
+import org.springframework.http.client.BufferingClientHttpRequestFactory;
+import org.springframework.http.client.ClientHttpRequestInterceptor;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -24,21 +26,24 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 
 
-public class UploadFileDocument extends SpringAndroidSpiceRequest<FileCreate> {
+public class UploadAttachmentDocument extends SpringAndroidSpiceRequest<FileCreate> {
 
     public final DocumentUploadActivity ctx;
     private final Authentication muthentication;
-    public String fileUrl;
+    public File file;
     DocumentDto mDocumentDto;
 
-    public UploadFileDocument(DocumentUploadActivity fragmentActivity, DocumentDto mDocumentDto, String fileurl, Authentication muthentication) {
+    public UploadAttachmentDocument(DocumentUploadActivity fragmentActivity, DocumentDto mDocumentDto, File fileurl, Authentication muthentication) {
         super(FileCreate.class);
         this.mDocumentDto = mDocumentDto;
-        this.fileUrl = fileurl;
+        this.file = fileurl;
         this.ctx = fragmentActivity;
         this.muthentication = muthentication;
     }
@@ -49,7 +54,7 @@ public class UploadFileDocument extends SpringAndroidSpiceRequest<FileCreate> {
         String pathTemplate;
 
         pathTemplate = url
-                + "services/data/v35.0/chatter/users/me/files";
+                + "services/data/v35.0/sobjects/Attachment";
         ObjectMapper mapper = new ObjectMapper();
         MultiValueMap<String, Object> parts = new LinkedMultiValueMap<String, Object>();
 
@@ -58,13 +63,13 @@ public class UploadFileDocument extends SpringAndroidSpiceRequest<FileCreate> {
         HttpHeaders xHeader = new HttpHeaders();
         xHeader.add("Content-Disposition", "form-data; name=json");
         xHeader.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<String> xPart = new HttpEntity<>("{\"title\":\"Shanuka Gayashan\"}", xHeader);
+        HttpEntity<String> xPart = new HttpEntity<>("{\"ParentId\":\"00328000009wzlIAAQ\",\"Name\":\""+file.getName()+"\"}", xHeader);
         parts.add("json", xPart);
 
-        System.out.println("edit cpd data " + mapper.writeValueAsString(this.mDocumentDto));
+       // System.out.println("fileUrl  " + fileUrl);
 
 
-        FileSystemResource fileSystemResource = new FileSystemResource(fileUrl) {
+        FileSystemResource fileSystemResource = new FileSystemResource(file.getAbsoluteFile()) {
 
             @Override
             public String getFilename() {
@@ -76,16 +81,16 @@ public class UploadFileDocument extends SpringAndroidSpiceRequest<FileCreate> {
 //                            }
 //                        }
 
-                return "index.jpg";
+                return file.getName();
             }
         };
 
 
-//        HttpHeaders headers = new HttpHeaders();
-//        headers.add("Content-Disposition", "form-data; name=\"Body\"; filename=\"2011Q1MktgBrochure.pdf\"");
-//        headers.setContentType(new MediaType("application","pdf"));
-        HttpEntity httpEntity = new HttpEntity(fileSystemResource);
-        parts.add("fileData", httpEntity);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Content-Disposition", "form-data; name=\"Body\"; filename=\""+file.getName()+"\"");
+        headers.setContentType(MediaType.IMAGE_JPEG);
+        HttpEntity httpEntity = new HttpEntity(fileSystemResource, headers);
+        parts.add("Body", httpEntity);
 
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
@@ -103,7 +108,7 @@ public class UploadFileDocument extends SpringAndroidSpiceRequest<FileCreate> {
 
         getRestTemplate().getMessageConverters().add(
                 new StringHttpMessageConverter());
-        getRestTemplate().setRequestFactory(new HttpComponentsClientHttpRequestFactory());
+        getRestTemplate().setRequestFactory(new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory()));
 
         //getRestTemplate().setMessageConverters().;
 
@@ -112,6 +117,12 @@ public class UploadFileDocument extends SpringAndroidSpiceRequest<FileCreate> {
         httpHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
         HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<MultiValueMap<String, Object>>(
                 parts, httpHeaders);
+        // RestTemplate restTemplate = new RestTemplate(new BufferingClientHttpRequestFactory(new SimpleClientHttpRequestFactory()));
+
+        List<ClientHttpRequestInterceptor> interceptors = new ArrayList<ClientHttpRequestInterceptor>();
+        LoggerInterceptor loggerInterceptor = new LoggerInterceptor();
+        interceptors.add(loggerInterceptor);
+        getRestTemplate().setInterceptors(interceptors);
 
 
         try {

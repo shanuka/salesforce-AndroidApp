@@ -10,9 +10,7 @@ import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceReques
 
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
@@ -28,91 +26,90 @@ public class AuthenticationRequest extends SpringAndroidSpiceRequest<Authenticat
 
     public String key;
 
-	public String offset = "0";
+    public String offset = "0";
 
-	public final Context ctx;
+    public final Context ctx;
 
-	private ErrorCalback errorCalback;
-
-
-	public AuthenticationRequest(Context ctx, String key,AuthenticationDto mAuthenticationDto) {
-		super(Authentication.class);
-		this.key = key;
-
-		this.ctx = ctx;
-
-        this.mAuthenticationDto =  mAuthenticationDto;
-
-	}
-
-	@Override
-	public Authentication loadDataFromNetwork() throws Exception {
+    private ErrorCalback errorCalback;
 
 
+    public AuthenticationRequest(Context ctx, String key, AuthenticationDto mAuthenticationDto) {
+        super(Authentication.class);
+        this.key = key;
 
-		String url = Constants.SERVER_URL;
-		String pathTemplate;
+        this.ctx = ctx;
 
-		pathTemplate = url
-				+ "services/oauth2/token";
+        this.mAuthenticationDto = mAuthenticationDto;
 
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
-			System.setProperty("http.keepAlive", "false");
-		}
+    }
+
+    @Override
+    public Authentication loadDataFromNetwork() throws Exception {
+
+
+        String url = Constants.SERVER_URL;
+        String pathTemplate;
+
+        pathTemplate = url
+                + "services/oauth2/token";
+
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.FROYO) {
+            System.setProperty("http.keepAlive", "false");
+        }
 
         getRestTemplate().getMessageConverters().add(
                 new FormHttpMessageConverter());
 
-		getRestTemplate().getMessageConverters().add(
-				new StringHttpMessageConverter());
+        getRestTemplate().getMessageConverters().add(
+                new StringHttpMessageConverter());
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
 
 
-		List<ClientHttpRequestInterceptor> interceptors = new ArrayList<ClientHttpRequestInterceptor>();
-		LoggerInterceptor loggerInterceptor = new LoggerInterceptor();
-		interceptors.add(loggerInterceptor);
-		getRestTemplate().setInterceptors(interceptors);
+        List<ClientHttpRequestInterceptor> interceptors = new ArrayList<ClientHttpRequestInterceptor>();
+        LoggerInterceptor loggerInterceptor = new LoggerInterceptor();
+        //interceptors.add(loggerInterceptor);
+        getRestTemplate().setInterceptors(interceptors);
 
         HttpEntity<MultiValueMap<String, String>> request = new HttpEntity<MultiValueMap<String, String>>(
                 mAuthenticationDto.getRequestBody(), headers);
 
-		try {
-            System.out.println("mAuthenticationDto body "+mAuthenticationDto.getRequestBody());
-            return  getRestTemplate().postForObject(pathTemplate, request,
+        try {
+            System.out.println("mAuthenticationDto body " + mAuthenticationDto.getRequestBody());
+            return getRestTemplate().postForObject(pathTemplate, request,
                     Authentication.class);
 //            HttpHeaders requestHeaders = new HttpHeaders();
 //            requestHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
 //            HttpEntity<MultiValueMap<String, String>> requestEntity = new HttpEntity<MultiValueMap<String, String>>(mAuthenticationDto.getRequestBody(), requestHeaders);
 //            ResponseEntity<Authentication> response = getRestTemplate().exchange(pathTemplate, HttpMethod.POST, requestEntity, Authentication.class);
 //            return response.getBody();
-		} catch (HttpServerErrorException e) {
+        } catch (HttpServerErrorException e) {
 
-			if (Constants.DEBUG_STATE) {
-				// Log.d(TAG, "authString authorization" + authString);
-				Log.d("Exception", "body " + e.getResponseBodyAsString());
-			}
-			throw e;
-		} catch (Exception e) {
-			if (errorCalback != null) {
-				errorCalback.onError(e);
-			}
-			throw e;
+            if (Constants.DEBUG_STATE) {
+                // Log.d(TAG, "authString authorization" + authString);
+                Log.d("Exception", "body " + e.getResponseBodyAsString());
+            }
+            throw e;
+        } catch (Exception e) {
+            if (errorCalback != null) {
+                errorCalback.onError(e);
+            }
+            throw e;
 
-		}
+        }
 
-	}
+    }
 
-	public void setErrorCalback(ErrorCalback errorCalback) {
-		this.errorCalback = errorCalback;
-	}
+    public void setErrorCalback(ErrorCalback errorCalback) {
+        this.errorCalback = errorCalback;
+    }
 
-	public interface ErrorCalback {
-		void onError(Exception e);
-	}
+    public interface ErrorCalback {
+        void onError(Exception e);
+    }
 
-	public String createCacheKey() {
-		return "item." + key;
-	}
+    public String createCacheKey() {
+        return "item." + key;
+    }
 }

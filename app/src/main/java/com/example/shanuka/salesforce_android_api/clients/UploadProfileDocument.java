@@ -1,14 +1,11 @@
 package com.example.shanuka.salesforce_android_api.clients;
 
-import android.os.Build;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.shanuka.salesforce_android_api.DocumentUploadActivity;
 import com.example.shanuka.salesforce_android_api.dto.DocumentDto;
 import com.example.shanuka.salesforce_android_api.model.Authentication;
-import com.fasterxml.jackson.core.JsonGenerationException;
-import com.fasterxml.jackson.databind.JsonMappingException;
+import com.example.shanuka.salesforce_android_api.model.FileCreate;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.octo.android.robospice.request.springandroid.SpringAndroidSpiceRequest;
 
@@ -24,21 +21,20 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.HttpClientErrorException;
 
-import java.io.IOException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
 
-public class UploadProfileDocument extends SpringAndroidSpiceRequest<String> {
+public class UploadProfileDocument extends SpringAndroidSpiceRequest<FileCreate> {
 
     public final DocumentUploadActivity ctx;
     private final Authentication muthentication;
     public String fileUrl;
     DocumentDto mDocumentDto;
 
-    public UploadProfileDocument(DocumentUploadActivity fragmentActivity, DocumentDto mDocumentDto, String fileurl, Authentication muthentication ) {
-        super(String.class);
+    public UploadProfileDocument(DocumentUploadActivity fragmentActivity, DocumentDto mDocumentDto, String fileurl, Authentication muthentication) {
+        super(FileCreate.class);
         this.mDocumentDto = mDocumentDto;
         this.fileUrl = fileurl;
         this.ctx = fragmentActivity;
@@ -46,7 +42,7 @@ public class UploadProfileDocument extends SpringAndroidSpiceRequest<String> {
     }
 
     @Override
-    public String loadDataFromNetwork() throws Exception {
+    public FileCreate loadDataFromNetwork() throws Exception {
         String url = "https://ap2.salesforce.com/";
         String pathTemplate;
 
@@ -56,15 +52,13 @@ public class UploadProfileDocument extends SpringAndroidSpiceRequest<String> {
         MultiValueMap<String, Object> parts = new LinkedMultiValueMap<String, Object>();
 
 
-
-
-       // Log.e("mDocumentDto", "getFolderId " + this.mDocumentDto.getFolderId());
+        // Log.e("mDocumentDto", "getFolderId " + this.mDocumentDto.getFolderId());
         HttpHeaders xHeader = new HttpHeaders();
         xHeader.add("Content-Disposition", "form-data; name=\"json\"");
         final Map<String, String> parameterMap = new HashMap<String, String>(4);
         parameterMap.put("charset", "UTF-8");
         xHeader.setContentType(
-                new MediaType("application","json", parameterMap));
+                new MediaType("application", "json", parameterMap));
         HttpEntity<String> xPart = new HttpEntity<>("{\"cropX\" : 0,\"cropY\" : 0,\"cropSize\" : 150 }", xHeader);
         parts.add("json", xPart);
 
@@ -87,7 +81,7 @@ public class UploadProfileDocument extends SpringAndroidSpiceRequest<String> {
 //            }
 //        };
 
-        FileSystemResource mFileSystemResource =  new FileSystemResource(fileUrl);
+        FileSystemResource mFileSystemResource = new FileSystemResource(fileUrl);
 //
 //
 //        HttpHeaders headers = new HttpHeaders();
@@ -123,22 +117,20 @@ public class UploadProfileDocument extends SpringAndroidSpiceRequest<String> {
         //getRestTemplate().setMessageConverters().;
 
         HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.add("Authorization",muthentication.getAuthentication());
+        httpHeaders.add("Authorization", muthentication.getAuthentication());
         httpHeaders.setContentType(MediaType.MULTIPART_FORM_DATA);
         HttpEntity<MultiValueMap<String, Object>> request = new HttpEntity<MultiValueMap<String, Object>>(
                 parts, httpHeaders);
 
 
-
-
         try {
 
-            return getRestTemplate().postForObject(pathTemplate, request, String.class);
+            return getRestTemplate().postForObject(pathTemplate, request, FileCreate.class);
         } catch (HttpClientErrorException e2) {
 
 
-                Log.d("ee",e2.getResponseBodyAsString());
-                // throw new SpiceException(mLoginError.getErrorDescription());
+            Log.d("ee", e2.getResponseBodyAsString());
+            // throw new SpiceException(mLoginError.getErrorDescription());
 
 
             throw e2;

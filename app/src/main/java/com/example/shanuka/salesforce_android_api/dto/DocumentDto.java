@@ -1,9 +1,5 @@
 package com.example.shanuka.salesforce_android_api.dto;
 
-import com.example.shanuka.salesforce_android_api.clients.Constants;
-
-import org.springframework.util.LinkedMultiValueMap;
-
 import roboguice.inject.ContextSingleton;
 
 /**

@@ -33,7 +33,7 @@ public class Authentication implements Parcelable {
     public Authentication() {
     }
 
-    public String getAuthentication(){
+    public String getAuthentication() {
         return tokenType.concat(" ").concat(accessToken);
     }
 

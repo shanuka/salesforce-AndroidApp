@@ -4,11 +4,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -113,7 +112,7 @@ public class MainActivity extends BaseActivity {
         public void onRequestSuccess(final Authentication mAuthentication) {
 
             //removeProgressFragment();
-            Ln.d("access_token", "access_token "+mAuthentication.getAccessToken());
+            Ln.d("access_token", "access_token " + mAuthentication.getAccessToken());
 
 //            Toast.makeText(MainActivity.this, mAuthentication.getAuthentication(), Toast.LENGTH_SHORT)
 //                    .show();
@@ -135,7 +134,7 @@ public class MainActivity extends BaseActivity {
 
     private void startMainActivity(Authentication mAuthentication) {
         Intent intent = new Intent(MainActivity.this, DocumentUploadActivity.class);
-        intent.putExtra(EXTRA_AUTHNTICATION,mAuthentication);
+        intent.putExtra(EXTRA_AUTHNTICATION, mAuthentication);
         startActivity(intent);
 
 

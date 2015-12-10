@@ -23,7 +23,7 @@ public class AuthenticationDto {
         loginServiceParam.add("client_secret", Constants.client_secret);
 
         loginServiceParam.add("grant_type", Constants.grant_type);
-        loginServiceParam.add("username",getUsername());
+        loginServiceParam.add("username", getUsername());
         loginServiceParam.add("password", getPassword());
 
         return loginServiceParam;
